@@ -24,9 +24,10 @@ const canvasSize = height - 10;
 canvas.width = canvasSize;
 canvas.height = canvasSize;
 const ctx = canvas.getContext("2d");
-let radius = canvas.height / 2;
-ctx.translate(radius, radius);
-radius = radius * 0.6
+const fullRadius = canvas.height / 2;
+ctx.translate(fullRadius, fullRadius);
+const radius = fullRadius * 0.6
+const outerRadius = fullRadius - radius;
 setInterval(drawClock, 1000);
 
 function drawClock() {
@@ -71,6 +72,16 @@ function drawFace(ctx, radius) {
     ctx.translate(0, -radius);
     ctx.rotate(-ang);
   }
+  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  for (let i = 0; i < imgData.data.length; i += 4) {
+    let dist = Math.sqrt(
+      Math.pow(i/4%canvas.width-canvas.width/2,2) +
+      Math.pow(i/4/canvas.width-canvas.height/2,2)) - radius*1.05;
+    if (dist > 0 && imgData.data[i+1] > 0 && Math.random()*outerRadius*0.7 < dist) {
+      imgData.data[i+1] = 0;
+    }
+  }
+  ctx.putImageData(imgData, 0, 0);
 }
 
 function drawNumbers(ctx, radius) {
