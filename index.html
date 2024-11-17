@@ -20,7 +20,9 @@ Sorry, your browser does not support canvas.
 const canvas = document.getElementById("canvas");
 const height = window.innerHeight|| document.documentElement.clientHeight|| 
   document.body.clientHeight;
-const canvasSize = height - 10;
+const width = window.innerWidth|| document.documentElement.clientWidth|| 
+  document.body.clientWidth;
+const canvasSize = Math.min(height, width) - 10;
 canvas.width = canvasSize;
 canvas.height = canvasSize;
 const ctx = canvas.getContext("2d");
